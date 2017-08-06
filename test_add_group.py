@@ -3,6 +3,7 @@ import pytest
 from group import Group
 from application import Application
 
+# инициализация фикстуры
 @pytest.fixture()
 def app(request):
     fixture = Application()
