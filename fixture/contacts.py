@@ -102,3 +102,14 @@ class ContactsHelper:
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit the form
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+
+
+    '''
+      Удаление первого контакта
+    '''
+    def delete_first_contact(self):
+        wd = self.app.wd
+        # select first contact
+        wd.find_element_by_name("selected[]").click()
+        # submit the deletion
+        wd.find_element_by_xpath("//form[@name='MainForm']/div[@class='left']/input[@value='Delete']").click()
