@@ -11,6 +11,13 @@ class Application:
         self.group = GroupHelper(self)
         self.contacts = ContactsHelper(self)
 
+    def is_valid(self):
+        try:
+            self.wd.current_url
+            return True
+        except:
+            return False
+
 
     def open_main_page(self):
         wd = self.wd
