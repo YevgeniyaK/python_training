@@ -113,6 +113,9 @@ class ContactsHelper:
         wd.find_element_by_name("selected[]").click()
         # submit the deletion
         wd.find_element_by_xpath("//form[@name='MainForm']/div[@class='left']/input[@value='Delete']").click()
+        # нажимаем ok во всплывающем окне
+        alert = wd.switch_to_alert()
+        alert.accept()
 
     '''
      Изменение контакта
@@ -195,3 +198,10 @@ class ContactsHelper:
         wd.find_element_by_xpath("//div[@id='content']/form[1]/input[22]").click()
 
 
+    '''
+    Проверка на существование контактов
+    '''
+
+    def count(self):
+        wd = self.app.wd
+        return len(wd.find_elements_by_name("selected[]"))
