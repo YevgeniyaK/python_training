@@ -102,7 +102,7 @@ class ContactsHelper:
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit the form
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-
+        self.contacts_cache = None
 
     '''
      Удаление первого контакта
@@ -116,6 +116,7 @@ class ContactsHelper:
         # нажимаем ok во всплывающем окне
         alert = wd.switch_to_alert()
         alert.accept()
+        self.contacts_cache = None
 
     '''
      Изменение контакта
@@ -196,7 +197,9 @@ class ContactsHelper:
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit the form
         wd.find_element_by_xpath("//div[@id='content']/form[1]/input[22]").click()
+        self.contacts_cashe = None
 
+    contacts_cache = None
 
     '''
     Проверка на существование контактов
@@ -208,14 +211,15 @@ class ContactsHelper:
 
 
     def get_contacts_list(self):
-        wd = self.app.wd
         # Открываем главную страницу, чтобы wd успел взять список td
         self.app.open_main_page()
-        contacts = []
-        for element in wd.find_elements_by_xpath("//table[@id='maintable']/tbody/tr[@name='entry']"):
-            cells = element.find_elements_by_tag_name("td")
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            firstname = cells[2].text
-            lastname = cells[1].text
-            contacts.append(Contact(id = id, firstname=firstname, lastname=lastname))
-        return contacts
+        if self.contacts_cache is None:
+            wd = self.app.wd
+            self.contacts_cache = []
+            for element in wd.find_elements_by_xpath("//table[@id='maintable']/tbody/tr[@name='entry']"):
+                cells = element.find_elements_by_tag_name("td")
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                firstname = cells[2].text
+                lastname = cells[1].text
+                self.contacts_cache.append(Contact(id = id, firstname=firstname, lastname=lastname))
+        return list(self.contacts_cache)
