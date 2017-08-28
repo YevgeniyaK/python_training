@@ -33,13 +33,21 @@ class GroupHelper:
      Удаление первой группы
     '''
     def delete_first_group(self):
+        self.delete_group_by_index(0)
+
+    '''
+    Удаление рандомной группы
+    '''
+    def delete_group_by_index(self, index):
         wd = self.app.wd
         self.open_group_page()
-        self.select_first_group()
+        self.select_group_by_index(index)
         #submit deletion
         wd.find_element_by_name("delete").click()
         self.return_to_group_page()
         self.group_cache = None
+
+
 
     '''
      Модификация группы
@@ -57,10 +65,17 @@ class GroupHelper:
         Модификация первой группы
     '''
 
-    def modify_first_group(self, new_group_data):
+    def modify_first_group(self):
+        self.modify_group_by_index(0)
+
+    '''
+    Модификация рандомной группы
+    '''
+
+    def modify_group_by_index(self, index, new_group_data):
         wd = self.app.wd
         self.open_group_page()
-        self.select_first_group()
+        self.select_group_by_index(index)
         # modification
         wd.find_element_by_name("edit").click()
         # fill
@@ -69,7 +84,6 @@ class GroupHelper:
         wd.find_element_by_name("update").click()
         self.return_to_group_page()
         self.group_cache = None
-
 
 
     '''
@@ -96,6 +110,13 @@ class GroupHelper:
     def select_first_group(self):
         wd = self.app.wd
         wd.find_element_by_name("selected[]").click()
+
+    '''
+    метод выбора рандомной группы
+    '''
+    def select_group_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
 
     '''
     проверка на существование групп

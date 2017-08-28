@@ -1,5 +1,6 @@
 from model.contact import Contact
 
+
 class ContactsHelper:
     def __init__(self, app):
         self.app = app
@@ -107,6 +108,7 @@ class ContactsHelper:
     '''
      Удаление первого контакта
     '''
+
     def delete_first_contact(self):
         wd = self.app.wd
         # select first contact
@@ -119,12 +121,28 @@ class ContactsHelper:
         self.contacts_cache = None
 
     '''
+    Удаление рандомного контакта
+    '''
+
+    def delete_contact_by_index(self, index):
+        wd = self.app.wd
+        # select contact
+        wd.find_elements_by_name("selected[]")[index].click()
+        # submit the deletion
+        wd.find_element_by_xpath("//form[@name='MainForm']/div[@class='left']/input[@value='Delete']").click()
+        # нажимаем ok во всплывающем окне
+        alert = wd.switch_to_alert()
+        alert.accept()
+        self.contacts_cache = None
+
+    '''
      Изменение контакта
     '''
-    def change_contact(self, contact):
+
+    def change_contact(self, index, contact):
         wd = self.app.wd
         # выбираем "редактировать"
-        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[%d]/td[8]/a/img" % (index + 2)).click()
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
         wd.find_element_by_name("firstname").send_keys(contact.firstname)
@@ -197,7 +215,7 @@ class ContactsHelper:
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit the form
         wd.find_element_by_xpath("//div[@id='content']/form[1]/input[22]").click()
-        self.contacts_cashe = None
+        self.contacts_cache = None
 
     contacts_cache = None
 
@@ -208,7 +226,6 @@ class ContactsHelper:
     def count(self):
         wd = self.app.wd
         return len(wd.find_elements_by_name("selected[]"))
-
 
     def get_contacts_list(self):
         # Открываем главную страницу, чтобы wd успел взять список td
@@ -221,5 +238,5 @@ class ContactsHelper:
                 id = element.find_element_by_name("selected[]").get_attribute("value")
                 firstname = cells[2].text
                 lastname = cells[1].text
-                self.contacts_cache.append(Contact(id = id, firstname=firstname, lastname=lastname))
+                self.contacts_cache.append(Contact(id=id, firstname=firstname, lastname=lastname))
         return list(self.contacts_cache)
