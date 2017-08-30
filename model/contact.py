@@ -4,11 +4,11 @@ from sys import maxsize
 class Contact:
     def __init__(self, firstname=None, middlename=None, lastname=None, nickname=None, title=None, company=None,
                  address=None, phone_home=None,
-                 phone_mobile=None, phone_work=None, fax_number=None, email=None, homepage=None, birthday_day=None,
+                 phone_mobile=None, phone_work=None, fax_number=None, email=None, email2=None, email3=None, homepage=None, birthday_day=None,
                  birthday_month=None,
                  birthday_year=None, anniversary_day=None, anniversary_month=None, anniversary_year=None,
                  secondary_address=None,
-                 home_address=None, notes=None, id=None, all_phones_from_home_page=None):
+                 secondary_phone=None, notes=None, id=None, all_phones_from_home_page=None, all_emails_from_home_page=None):
         """
 
         :rtype: object
@@ -25,6 +25,8 @@ class Contact:
         self.phone_work = phone_work
         self.fax_number = fax_number
         self.email = email
+        self.email2 = email2
+        self.email3 = email3
         self.homepage = homepage
         self.birthday_day = birthday_day
         self.birthday_month = birthday_month
@@ -33,10 +35,11 @@ class Contact:
         self.anniversary_month = anniversary_month
         self.anniversary_year = anniversary_year
         self.secondary_address = secondary_address
-        self.home_address = home_address
+        self.secondary_phone = secondary_phone
         self.notes = notes
         self.id = id
         self.all_phones_from_home_page = all_phones_from_home_page
+        self.all_emails_from_home_page = all_emails_from_home_page
 
     def __repr__(self):
         return "%s:%s:%s" % (self.id, self.firstname, self.lastname)
