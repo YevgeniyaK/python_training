@@ -8,7 +8,7 @@ class Contact:
                  birthday_month=None,
                  birthday_year=None, anniversary_day=None, anniversary_month=None, anniversary_year=None,
                  secondary_address=None,
-                 home_address=None, notes=None, id=None):
+                 home_address=None, notes=None, id=None, all_phones_from_home_page=None):
         """
 
         :rtype: object
@@ -36,6 +36,7 @@ class Contact:
         self.home_address = home_address
         self.notes = notes
         self.id = id
+        self.all_phones_from_home_page = all_phones_from_home_page
 
     def __repr__(self):
         return "%s:%s:%s" % (self.id, self.firstname, self.lastname)
