@@ -248,6 +248,7 @@ class ContactsHelper:
             for element in wd.find_elements_by_xpath("//table[@id='maintable']/tbody/tr[@name='entry']"):
                 cells = element.find_elements_by_tag_name("td")
                 id = element.find_element_by_name("selected[]").get_attribute("value")
+                #Если в конце или начале текста есть пробелы, они будут удалены
                 firstname = cells[2].text
                 lastname = cells[1].text
                 address = cells[3].text
