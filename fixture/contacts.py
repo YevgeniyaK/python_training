@@ -238,9 +238,8 @@ class ContactsHelper:
                 id = element.find_element_by_name("selected[]").get_attribute("value")
                 firstname = cells[2].text
                 lastname = cells[1].text
-                all_phones = cells[5].text.splitlines()
-                self.contacts_cache.append(Contact(id=id, firstname=firstname, lastname=lastname, phone_home=all_phones[0],
-                                                   phone_mobile=all_phones[1], phone_work=all_phones[2]))
+                all_phones = cells[5].text
+                self.contacts_cache.append(Contact(id=id, firstname=firstname, lastname=lastname, all_phones_from_home_page=all_phones))
         return list(self.contacts_cache)
 
 
