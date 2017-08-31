@@ -3,24 +3,27 @@ from model.contact import Contact
 import pytest
 import random
 import string
+import re
 
 def random_string(prefix, maxlen):
     symbols = string.ascii_letters + string.digits + " "*10
-    #не забывать удалить возможные пробелы в конце строки
-    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))]).rstrip(" ")
+    return clear_spaces(prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))]))
 
 def random_string_letters(prefix, maxlen):
     symbols = string.ascii_letters + " "*10
-    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))]).rstrip(" ")
+    return clear_spaces(prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))]))
 
 def random_string_numbers(prefix, maxlen):
     symbols = string.digits + " "
-    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))]).rstrip(" ")
+    return clear_spaces(prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))]))
 
 def random_title():
     titles = ["Mr.", "Ms.", "Mrs.", "Dr."]
     return random.choice(titles)
 
+#очищаем двойные пробелы и пробелы в начале и в конце
+def clear_spaces(s):
+    return re.sub("\s\s", " ", s).strip(" ")
 
 testdata = [Contact(firstname=random_string_letters("firstname", 10), middlename=random_string_letters("middlename", 10), lastname=random_string_letters("lastname", 10),
                                              nickname=random_string_letters("nickname", 10), title=random_title(), company=random_string_letters("company", 10),
