@@ -1,18 +1,28 @@
 from model.group import Group
-from random import randrange
+import random
 
-def test_modify_group_name(app):
+
+def test_modify_group_name(app, db, check_ui):
     if app.group.count() == 0:
         app.group.create(Group(name="Test"))
-    old_groups = app.group.get_group_list()
-    index = randrange(len(old_groups))
-    group = Group(name="new group")
-    group.id = old_groups[index].id
-    app.group.modify_group_by_index(index, group)
-    new_groups = app.group.get_group_list()
+    old_groups = db.get_group_list()
+    group = random.choice(old_groups)
+    group.name = "new name"
+    app.group.modify_group_by_id(group.id, group)
+    new_groups = db.get_group_list()
     assert len(old_groups) == len(new_groups)
-    old_groups[index] = group
-    assert sorted(old_groups, key=Group.id_or_max) == sorted(new_groups, key=Group.id_or_max)
+    if check_ui:
+        app_groups = app.group.get_group_list()
+        for new_group in new_groups:
+            for app_group in app_groups:
+                if new_group.id == app_group.id:
+                    if new_group.id == group.id:
+                        assert new_group.name == group.name
+                    else:
+                        assert new_group.name == app_group.name
+                    break
+
+
 
 
 #def test_modify_group_header(app):
@@ -22,3 +32,4 @@ def test_modify_group_name(app):
 #    app.group.modify_first_group(Group(header="new header"))
 #    new_groups = app.group.get_group_list()
 #   assert len(old_groups) == len(new_groups)
+# assert sorted(old_groups, key=Group.id_or_max) == sorted(new_groups, key=Group.id_or_max)

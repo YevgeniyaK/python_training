@@ -15,7 +15,12 @@ def test_delete_some_group(app, db, check_ui):
     assert old_groups == new_groups
     if check_ui:
         app_groups = app.group.get_group_list()
-        assert sorted(new_groups, key=Group.id_or_max) == sorted(app_groups, key=Group.id_or_max)
+        for new_group in new_groups:
+            for app_group in app_groups:
+                if new_group.id == app_group.id:
+                    assert new_group.name == app_group.name
+                    break
+
 
 
 '''
