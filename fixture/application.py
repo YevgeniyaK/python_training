@@ -35,4 +35,6 @@ class Application:
     def destroy(self):
         self.wd.quit()
 
-
+    def open_contact_edit_page(self, id):
+        wd = self.wd
+        wd.get(self.base_url + "edit.php?id=" + id)

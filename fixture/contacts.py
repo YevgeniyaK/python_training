@@ -300,3 +300,53 @@ class ContactsHelper:
         phone_work = re.search("W: (.*)", text).group(1)
         return Contact(phone_home=phone_home, phone_mobile=phone_mobile, phone_work=phone_work)
 
+
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.select_contact_id(id)
+        wd.find_element_by_xpath("//form[@name='MainForm']/div[@class='left']/input[@value='Delete']").click()
+        alert = wd.switch_to_alert()
+        alert.accept()
+        self.contacts_cache = None
+
+
+    def select_contact_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+
+    def change_contact_by_id(self, id, contact):
+        wd = self.app.wd
+        self.app.open_contact_edit_page(id)
+        wd.find_element_by_name("firstname").click()
+        wd.find_element_by_name("firstname").clear()
+        wd.find_element_by_name("firstname").send_keys(contact.firstname)
+        wd.find_element_by_name("lastname").click()
+        wd.find_element_by_name("lastname").clear()
+        wd.find_element_by_name("lastname").send_keys(contact.lastname)
+        wd.find_element_by_name("address").click()
+        wd.find_element_by_name("address").clear()
+        wd.find_element_by_name("address").send_keys(contact.address)
+        wd.find_element_by_name("home").click()
+        wd.find_element_by_name("home").clear()
+        wd.find_element_by_name("home").send_keys(contact.phone_home)
+        wd.find_element_by_name("mobile").click()
+        wd.find_element_by_name("mobile").clear()
+        wd.find_element_by_name("mobile").send_keys(contact.phone_mobile)
+        wd.find_element_by_name("work").click()
+        wd.find_element_by_name("work").clear()
+        wd.find_element_by_name("work").send_keys(contact.phone_work)
+        wd.find_element_by_name("email").click()
+        wd.find_element_by_name("email").clear()
+        wd.find_element_by_name("email").send_keys(contact.email)
+        wd.find_element_by_name("email2").click()
+        wd.find_element_by_name("email2").clear()
+        wd.find_element_by_name("email2").send_keys(contact.email2)
+        wd.find_element_by_name("email3").click()
+        wd.find_element_by_name("email3").clear()
+        wd.find_element_by_name("email3").send_keys(contact.email3)
+        wd.find_element_by_name("phone2").click()
+        wd.find_element_by_name("phone2").clear()
+        wd.find_element_by_name("phone2").send_keys(contact.secondary_phone)
+        # submit the form
+        wd.find_element_by_xpath("//div[@id='content']/form[1]/input[22]").click()
+        self.contacts_cache = None
