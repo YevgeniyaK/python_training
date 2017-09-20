@@ -79,3 +79,13 @@ class DbFixture:
         finally:
             cursor.close()
         return list
+
+    def contact_in_group(self, contact_id, group_id):
+        cursor=self.connection.cursor()
+        try:
+            cursor.execute("SELECT count(*) FROM `address_in_groups` WHERE id = "+contact_id+" and group_id = "+group_id+" and deprecated = '0000-00-00 00:00:00'")
+            number_rows = cursor.fetchone()[0]
+        finally:
+            cursor.close()
+        return number_rows > 0
+

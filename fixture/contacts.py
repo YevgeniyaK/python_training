@@ -1,4 +1,5 @@
 from model.contact import Contact
+from model.group import Group
 import re
 
 class ContactsHelper:
@@ -350,3 +351,42 @@ class ContactsHelper:
         # submit the form
         wd.find_element_by_xpath("//div[@id='content']/form[1]/input[22]").click()
         self.contacts_cache = None
+
+
+    def add_contact_to_group(self, contact, group):
+        wd = self.app.wd
+        self.app.open_main_page()
+        self.select_contact_id(contact.id)
+        wd.find_element_by_xpath("//select[@name='to_group']/option[@value='"+group.id+"']").click()
+        wd.find_element_by_xpath("//div[@class='right']/input[@name='add']").click()
+
+
+    def get_contacts_list_from_groups_page(self, group_id):
+        # Открываем страницу контактов в группе
+        wd = self.app.wd
+        wd.get(self.app.base_url + "?group=" + group_id)
+        contacts_list = []
+
+        # в группе без названия нет кнопки удаления контакта
+        if len(wd.find_elements_by_xpath("//input[@name='remove']")) == 0:
+            return contacts_list
+
+        for element in wd.find_elements_by_xpath("//table[@id='maintable']/tbody/tr[@name='entry']"):
+            cells = element.find_elements_by_tag_name("td")
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            #Если в конце или начале текста есть пробелы, они будут удалены
+            firstname = cells[2].text
+            lastname = cells[1].text
+            address = cells[3].text
+            all_emails = cells[4].text
+            all_phones = cells[5].text
+            contacts_list.append(Contact(id=id, firstname=firstname, lastname=lastname, address=address,
+                                               all_emails_from_home_page=all_emails, all_phones_from_home_page=all_phones))
+        return contacts_list
+
+
+    def delete_contact_from_group_by_id(self, id):
+        wd = self.app.wd
+        self.select_contact_id(id)
+        wd.find_element_by_xpath("//input[@name='remove']").click()
+
